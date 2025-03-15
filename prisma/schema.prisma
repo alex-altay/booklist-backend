@@ -1,0 +1,64 @@
+// This is your Prisma schema file
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  email         String   @unique
+  passwordHash  String
+  resetToken    String?
+  books         Book[]
+}
+
+model Book {
+  id          Int       @id @default(autoincrement())
+  title       String
+  author      String
+  language    Language  @default(RU)
+  startDate   DateTime?
+  endDate     DateTime?
+  hasFinished Boolean?  @default(false)
+  description String?
+  rating      Rating?
+  category    Category?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+}
+
+enum Language {
+  RU
+  EN
+  DE
+}
+
+enum Rating {
+  WORST // '1 - хуже не бывает'
+  VERY_BAD // '2 - очень плохо'
+  BAD // '3 - плохо'
+  BELOW_AVERAGE // '4 - ниже среднего'
+  AVERAGE // '5 - средне обычно'
+  ABOVE_AVERAGE // '6 - выше среднего'
+  WORTH_READING // '7 - стоило прочитать'
+  GOOD // '8 - хорошо'
+  EXCELLENT // '9 - отлично'
+  BEST // '10 - лучше не бывает'
+}
+
+enum Category {
+  NON_FICTION
+  SCIENCE
+  POETRY
+  TECHNICAL
+  PHILOSOPHY
+  FICTION
+}
