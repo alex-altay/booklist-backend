@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "dotenv -e .env.dev -- nest build",
-    "prebuild": "npx prisma generate --no-engine && npx prisma migrate dev --schema=prisma/schema.prisma",
+    "prebuild": "npx prisma generate --no-engine",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
