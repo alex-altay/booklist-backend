@@ -1,13 +1,12 @@
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository
-
+Simple CRUD backend for Booklist project made with [Nest](https://docs.nestjs.com/)
 
 ## Start development from the scratch
 
 ```bash
 $ npm install
-// Start from clean DB
+// Create and run an instance of new clean database
 $ npm run dev:db:clean-restart
 // Apply all migrations
 $ npm run dev:migrate:postgres
@@ -17,13 +16,8 @@ $ npm run prisma:studio:dev
 $ npm run dev
 ```
 
-To check - use Insomnia for running http requests
+To check - use [Insomnia](https://insomnia.rest/) for running http requests
 
-## Installation
-
-```bash
-$ npm install
-```
 
 ## Prepare POSTGRES container
 
@@ -56,7 +50,3 @@ $ npm run start:prod
 ```bash
 $ npm run test:e2e
 ```
-
-## NestJS Docs
-
-[Located here](https://docs.nestjs.com/)

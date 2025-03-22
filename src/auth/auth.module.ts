@@ -1,10 +1,10 @@
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
+import { JwtModule } from '@nestjs/jwt'
 import { JwtStrategy } from './strategy'
 import { MailModule } from '../mail/mail.module'
 import { MailService } from '../mail/mail.service'
 import { Module } from '@nestjs/common'
-import { JwtModule } from '@nestjs/jwt'
 
 @Module({
   imports: [JwtModule.register({}), MailModule],

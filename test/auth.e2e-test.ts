@@ -216,7 +216,6 @@ describe('AuthController (e2e)', () => {
     })
   })
 
-  // TODO - Mock email sending - Падает ошибка от мейлера при попытке отправить письмо
   describe(`POST ${RESET_PASSWORD_URL}`, () => {
     it('whole resetting password flow should work as expected', async () => {
       const EMAIL = 'test@example.com'

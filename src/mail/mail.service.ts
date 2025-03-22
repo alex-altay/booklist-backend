@@ -1,7 +1,7 @@
-import { MailerService } from '@nestjs-modules/mailer'
+import { ConfigService } from '@nestjs/config'
 import { Injectable } from '@nestjs/common'
 import { Logger } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
+import { MailerService } from '@nestjs-modules/mailer'
 import { type User } from '@prisma/client'
 
 const MAILER_ERROR = 'Mail Provider or NestJS NodeMailer settings should be updated'
