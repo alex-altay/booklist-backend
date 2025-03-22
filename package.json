@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
-    "prebuild": "npm install && npm run dev:migrate:postgres",
+    "build": "dotenv -e .env.dev -- nest build",
+    "prebuild": "dotenv -e .env.dev -- npm install && npx prisma migrate dev --schema=prisma/schema.prisma",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
