@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "dotenv -e .env.dev -- nest build",
+    "build": "nest build",
     "prebuild": "npx prisma generate --no-engine",
-    "start": "nest start",
+    "start": "npx prisma generate && node dist/main",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "dev": "nest start --env-file .env.dev --watch",
