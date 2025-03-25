@@ -10,6 +10,10 @@ async function bootstrap() {
       whitelist: true,
     }),
   )
+  app.enableCors({
+    origin: [process.env.DOMAIN_NAME],
+    credentials: true,
+  })
 
   const { httpAdapter } = app.get(HttpAdapterHost)
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter))
