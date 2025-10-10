@@ -11,13 +11,46 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  email         String   @unique
-  passwordHash  String
-  resetToken    String?
-  books         Book[]
+  id                  Int      @id @default(autoincrement())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  email               String   @unique
+  books               Book[]
+  passkeys            PassKey[]
+  webAuthnChallenges  WebAuthnChallenge[]
+}
+
+model PassKey {
+  id              String    @id @default(uuid())
+  credentialId    Bytes     @unique         // Идентификатор ключа аутентификации
+  publicKey       Bytes                     // Публичный ключ аутентификатора
+  counter         BigInt                    // Счетчик для защиты от повторных атак
+  transports      String[]                  // Методы транспорта ("usb", "ble", "nfc")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          Int
+  userHandle      Bytes?                    // Непрозрачный идентификатор пользователя для аутентификатора
+  fmt             String                    // Формат аттестации ("android-key" | "tpm" | "apple" | "none")
+  aaguid          String                    // Глобальный ID модели аутентификатора
+}
+
+model WebAuthnChallenge {
+  id         String       @id @default(uuid())
+  requestId  String       @unique
+  type       ChallengeType
+  userId     Int?
+  user       User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge  String
+  isConsumed Boolean      @default(false)
+  createdAt  DateTime     @default(now())
+  expiresAt  DateTime
+  @@index([expiresAt])
+}
+
+enum ChallengeType {
+  REGISTRATION
+  AUTHENTICATION
 }
 
 model Book {
@@ -42,16 +75,16 @@ enum Language {
 }
 
 enum Rating {
-  WORST // '1 - хуже не бывает'
-  VERY_BAD // '2 - очень плохо'
-  BAD // '3 - плохо'
-  BELOW_AVERAGE // '4 - ниже среднего'
-  AVERAGE // '5 - средне обычно'
-  ABOVE_AVERAGE // '6 - выше среднего'
-  WORTH_READING // '7 - стоило прочитать'
-  GOOD // '8 - хорошо'
-  EXCELLENT // '9 - отлично'
-  BEST // '10 - лучше не бывает'
+  WORST           // '1 - хуже не бывает'
+  VERY_BAD        // '2 - очень плохо'
+  BAD             // '3 - плохо'
+  BELOW_AVERAGE   // '4 - ниже среднего'
+  AVERAGE         // '5 - средне обычно'
+  ABOVE_AVERAGE   // '6 - выше среднего'
+  WORTH_READING   // '7 - стоило прочитать'
+  GOOD            // '8 - хорошо'
+  EXCELLENT       // '9 - отлично'
+  BEST            // '10 - лучше не бывает'
 }
 
 enum Category {

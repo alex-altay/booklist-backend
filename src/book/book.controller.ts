@@ -1,7 +1,7 @@
 import { BookService } from './book.service'
 import { BookDto } from './dto'
-import { GetUser } from '../auth/decorator'
-import { JwtGuard } from '../auth/guard'
+import { GetUser } from '../webauthn/decorator'
+import { JwtGuard } from '../webauthn/guard'
 import {
   Controller,
   Body,
