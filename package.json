@@ -22,7 +22,7 @@
     "test:db:clean-restart": "docker compose -f docker-compose.test.yml down && docker compose -f docker-compose.test.yml up -d && sleep 1",
     "test:migrate:postgres": "dotenv -e .env.test -- npx prisma migrate dev --schema=prisma/schema.prisma",
     "pretest:e2e": "dotenv -e .env.test -- npm run test:db:clean-restart && npm run test:migrate:postgres",
-    "test:e2e": "dotenv -e .env.test -- jest -i --watch --no-cache --config ./test/jest-e2e.json",
+    "test:e2e": "dotenv -e .env.test -- jest -i --watchAll --no-cache --config ./test/jest-e2e.json",
     "prepare": "husky install"
   },
   "dependencies": {

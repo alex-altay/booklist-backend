@@ -1,7 +1,8 @@
 import { $Enums, type Book } from '@prisma/client'
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
-import { IsString, IsNotEmpty, IsBoolean, IsOptional, IsEnum } from 'class-validator'
-import { Type } from 'class-transformer'
+import { IsString, IsNotEmpty, IsBoolean, IsOptional, IsEnum, Validate } from 'class-validator'
+import { IsValidDateConstraint, swaggerDateDescription, transformDate } from '../../utils/dates'
+import { Transform } from 'class-transformer'
 
 export class BookDto implements Partial<Book> {
   @ApiProperty()
@@ -19,14 +20,16 @@ export class BookDto implements Partial<Book> {
   @IsEnum($Enums.Language)
   language?: $Enums.Language
 
-  @ApiPropertyOptional({ type: String, format: 'date-time', required: false, nullable: true })
+  @ApiPropertyOptional(swaggerDateDescription)
   @IsOptional()
-  @Type(() => Date)
+  @Transform(transformDate)
+  @Validate(IsValidDateConstraint)
   startDate?: Date | null
 
-  @ApiPropertyOptional({ type: String, format: 'date-time', required: false, nullable: true })
+  @ApiPropertyOptional(swaggerDateDescription)
   @IsOptional()
-  @Type(() => Date)
+  @Transform(transformDate)
+  @Validate(IsValidDateConstraint)
   endDate?: Date | null
 
   @ApiPropertyOptional({ type: Boolean, required: false, nullable: true })

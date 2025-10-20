@@ -30,17 +30,12 @@ export class BookService {
     })
   }
 
-  async updateBook(
-    id: Book['id'],
-    userId: User['id'],
-    bookDto: BookDto,
-  ): Promise<{ allBooks: Book[]; updatedBook: Book }> {
+  async updateBook(id: Book['id'], userId: User['id'], bookDto: BookDto): Promise<Book> {
     const updatedBook = await this.prisma.book.update({
       where: { id, userId },
       data: { ...bookDto },
     })
-    const allBooks = await this.getBooks(userId)
-    return { allBooks, updatedBook }
+    return updatedBook
   }
 
   async deleteBook(id: Book['id'], userId: User['id']): Promise<Book[]> {
