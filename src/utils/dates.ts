@@ -37,8 +37,8 @@ const swaggerDateDescription = {
       { type: 'string', format: 'date-time', example: '2024-10-20T10:30:00Z' },
       { type: 'integer', example: 1729420200000, description: 'Unix timestamp (ms)' },
     ],
-    nullable: true,
   },
+  nullable: true,
   required: false,
   description: 'Accepts ISO 8601 date string or Unix timestamp in milliseconds',
 }
