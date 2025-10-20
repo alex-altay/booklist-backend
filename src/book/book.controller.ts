@@ -1,3 +1,4 @@
+import { ApiSecurity, ApiParam, ApiTags } from '@nestjs/swagger'
 import { BookService } from './book.service'
 import { BookDto } from './dto'
 import { GetUser } from '../webauthn/decorator'
@@ -15,7 +16,9 @@ import {
 } from '@nestjs/common'
 import type { Book, User } from '@prisma/client'
 
+@ApiTags('Books')
 @UseGuards(JwtGuard)
+@ApiSecurity('jwt')
 @Controller('books')
 export class BookController {
   constructor(private bookService: BookService) {}
@@ -31,6 +34,12 @@ export class BookController {
   }
 
   @Get(':id')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    example: '1',
+    type: String,
+  })
   getBookById(@Param('id', ParseIntPipe) id: Book['id'], @GetUser('userId') userId: User['id']) {
     return this.bookService.getBookById(id, userId)
   }
