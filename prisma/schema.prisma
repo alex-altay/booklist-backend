@@ -57,7 +57,7 @@ model Book {
   id          Int       @id @default(autoincrement())
   title       String
   author      String
-  language    Language  @default(RU)
+  language    Language? @default(RU)
   startDate   DateTime?
   endDate     DateTime?
   hasFinished Boolean?  @default(false)

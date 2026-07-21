@@ -15,10 +15,10 @@ export class BookDto implements Partial<Book> {
   @IsNotEmpty()
   author: string
 
-  @ApiPropertyOptional({ enum: Object.values($Enums.Language), required: false })
+  @ApiPropertyOptional({ enum: Object.values($Enums.Language), required: false, nullable: true })
   @IsOptional()
   @IsEnum($Enums.Language)
-  language?: $Enums.Language
+  language?: $Enums.Language | null
 
   @ApiPropertyOptional(swaggerDateDescription)
   @IsOptional()
