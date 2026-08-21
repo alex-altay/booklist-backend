@@ -60,7 +60,7 @@ model Book {
   language    Language? @default(RU)
   startDate   DateTime?
   endDate     DateTime?
-  hasFinished Boolean?  @default(false)
+  status      Status?
   description String?
   rating      Rating?
   category    Category?
@@ -94,4 +94,9 @@ enum Category {
   TECHNICAL
   PHILOSOPHY
   FICTION
+}
+
+enum Status {
+  DROPPED
+  FINISHED
 }

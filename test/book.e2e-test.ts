@@ -5,7 +5,7 @@ import { ExecutionContext, INestApplication, ValidationPipe } from '@nestjs/comm
 import { JwtGuard } from '../src/webauthn/guard'
 import { PrismaService } from '../src/prisma/prisma.service'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Book } from '@prisma/client'
+import { Book, $Enums } from '@prisma/client'
 
 describe('BookModule (e2e)', () => {
   let app: INestApplication
@@ -62,7 +62,7 @@ describe('BookModule (e2e)', () => {
       author: 'Author',
       startDate: '2025-10-20T00:00:00.000Z',
       endDate: null,
-      hasFinished: false,
+      status: null,
       description: 'desc',
     }
 
@@ -96,11 +96,11 @@ describe('BookModule (e2e)', () => {
     expect(books.length).toBe(0)
   })
 
-  it('POST /books/create - invalid boolean (hasFinished as number) -> 400 and no record', async () => {
+  it('POST /books/create - invalid enum (status as number) -> 400 and no record', async () => {
     const badRequest = {
       title: 'T',
       author: 'A',
-      hasFinished: 123,
+      status: 123,
     }
     await request(server).post('/books/create').send(badRequest).expect(400)
     const books = await prisma.book.findMany()
@@ -121,7 +121,8 @@ describe('BookModule (e2e)', () => {
       .patch(`/books/update/${created.id}`)
       .send(payload)
       .expect(200)
-    expect(response.body).toHaveProperty('id', created.id)
+    const updatedBook = (response.body as { updatedBook: Book; allBooks: Book[] }).updatedBook
+    expect(updatedBook).toHaveProperty('id', created.id)
 
     const updated = await prisma.book.findUnique({ where: { id: created.id } })
     expect(updated!.title).toBe('Updated Title')
@@ -132,15 +133,15 @@ describe('BookModule (e2e)', () => {
     const data = {
       title: 'HasFlag',
       author: 'Auth',
-      hasFinished: false,
+      status: $Enums.Status.FINISHED,
       userId: currentUserId,
     }
     const created = await prisma.book.create({ data })
 
-    const payload = { title: 'HasFlag', author: 'Auth', hasFinished: null }
+    const payload = { title: 'HasFlag', author: 'Auth', status: null }
     await request(server).patch(`/books/update/${created.id}`).send(payload).expect(200)
     const updated = await prisma.book.findUnique({ where: { id: created.id } })
-    expect(updated!.hasFinished).toBeNull()
+    expect(updated!.status).toBeNull()
   })
 
   it('PATCH /books/update/:id - date as string timestamp "12345" should not broke anything', async () => {
@@ -221,11 +222,11 @@ describe('BookModule (e2e)', () => {
     expect(books.length).toBe(1)
   })
 
-  it('POST /books/create - invalid hasFinished type (string) -> 400 and no record', async () => {
+  it('POST /books/create - invalid status type (string) -> 400 and no record', async () => {
     const badRequest = {
       title: 'T',
       author: 'A',
-      hasFinished: 'not-a-bool',
+      status: 'not-a-enum',
     }
     await request(server).post('/books/create').send(badRequest).expect(400)
     const books = await prisma.book.findMany()
@@ -271,7 +272,7 @@ describe('BookModule (e2e)', () => {
       author: 'Author',
       startDate: null,
       endDate: null,
-      hasFinished: null,
+      status: null,
       description: null,
       rating: null,
       category: null,
@@ -284,7 +285,7 @@ describe('BookModule (e2e)', () => {
     expect(stored).toBeTruthy()
     expect(stored!.startDate).toBeNull()
     expect(stored!.endDate).toBeNull()
-    expect(stored!.hasFinished).toBeNull()
+    expect(stored!.status).toBeNull()
     expect(stored!.description).toBeNull()
     expect(stored!.rating).toBeNull()
     expect(stored!.category).toBeNull()
